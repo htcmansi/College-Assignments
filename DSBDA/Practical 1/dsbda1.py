@@ -1,9 +1,12 @@
 import pandas as pd
+import numpy as np
+from sklearn import preprocessing
 df=pd.DataFrame({'ID':[1,2,3,3],
-                 'Name': ['Mansi','Prajakta','Rutuja','Bhakti'],
+                 'Name': ['Mansi','Vedant','Tanuja','Abhi'],
                  'age':[19,20,20,22],
                  'marks':[90,'N',56,67]})
 print(df)
+
 #calculate avg
 c=avg=0
 for num in df['marks']:
@@ -15,17 +18,25 @@ avg /=c
 #replacing missing values
 df=df.replace(to_replace="N",value=avg)
 print(df)
+ 
+data=np.array([56,45,35,45])
+#Normalization
+Norm_arr=preprocessing.normalize([data])
+print(Norm_arr)
 
 #filtering data 
 #top scoring student
 df=df[df['marks']>=50]
-#print(df)
+print(df)
+
 #remove the column
 df=df.drop(['age'],axis=1)
 print(df)
+
 #add row
 df.loc[len(df.index)]=[4,'Shweta',70]
 print(df)
+
 #merging data frames
 details=pd.DataFrame({'ID':[1,2,3,],
                       'Branch':['CS','CS','IT'],
