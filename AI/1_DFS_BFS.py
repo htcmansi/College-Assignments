@@ -40,7 +40,7 @@ for node in graph:
     if node not in visited:
         bfs(graph, node)
 
-# DFS algorithm driver code
+# DFS algorithm driver
 visited = set()
 print("\nDFS Traversal:")
 for node in graph:
