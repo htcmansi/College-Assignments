@@ -1,62 +1,44 @@
-import pandas as pd
-import numpy as np
-import csv
-from scipy import stats
-from scipy.stats import boxcox
-data = pd.read_csv(r'C:\python\employees.csv')
-#print(data)
+import pandas as pd 
+import numpy as np 
 
-# check for missing values
-if data.isnull().values.any():
-    print("There are missing values in the DataFrame.")
-else:
-    print("No")
-    
-# replace missing values with mean or median
-    for col in data.columns:
-        if data[col].isnull().values.any():
-            if data[col].dtype != 'object':
-                median = data[col].median()
-                data[col].fillna(median, inplace=True)
-            else:
-                mode = data[col].mode().iloc[0]
-                data[col].fillna(mode, inplace=True)
-print(data)
+df=pd.read_csv(r'C:\CSV_file\Academic-Performance-Dataset.csv') 
+df.head()   
 
-# check for inconsistencies
-for col in data.columns:
-    if data[col].dtype == 'object':
-        unique_vals = data[col].unique()
-        if len(unique_vals) > 2:
-            print(f"Inconsistent values found in {col}: {unique_vals}")
+df['EM1_marks'].isnull().sum()  
 
-# replace inconsistent values with mode
-mode = data[col].mode().iloc[0]
-data[col].replace(unique_vals, mode, inplace=True)
+df['math score'].describe()  
 
-# detect and deal with outliers in numeric variables
-for col in data.select_dtypes(include=[np.number]).columns:
-    q1 = data[col].quantile(0.25)
-    q3 = data[col].quantile(0.75)
+#replacing null values with mean of that column
+
+mean_value=df['Total Marks'].mean()  
+df['Total Marks'].fillna(mean_value , inplace=False)  
+df['Total Marks'].head()   
+
+#detecting outliers
+
+def detect_outliers_iqr(column):
+    # Calculate the first quartile (Q1) and third quartile (Q3)
+    q1 = column.quantile(0.25)
+    q3 = column.quantile(0.75)
+
+    # Calculate the IQR (Interquartile Range)
     iqr = q3 - q1
+
+    # Define the lower and upper bounds for outliers
     lower_bound = q1 - 1.5 * iqr
     upper_bound = q3 + 1.5 * iqr
-    outliers = data[(data[col] < lower_bound) | (data[col] > upper_bound)][col]
-    if not outliers.empty:
-        print(f"Outliers found in {col}: {outliers.values}")
 
-# replace outliers with the median
-median = data[col].median()
-data.loc[(data[col] < lower_bound) | (data[col] > upper_bound), col] = median
+    # Find the outliers
+    outliers = column[(column < lower_bound) | (column > upper_bound)] 
+    print(iqr) 
+    print(lower_bound) 
+    print(upper_bound)  
+    return outliers
 
-# apply Box-Cox transformation on income variable to reduce skewness
-transformed_income, lambda_value = boxcox(data['income'])
-data['income_transformed'] = transformed_income
+outliers = detect_outliers_iqr(df['Total Marks'])  
+print("Outliers:", outliers)
 
+# data transformation
 
-# print the cleaned DataFrame
-print(data)
-
-
-
-
+transformed_data=np.log(df['Total Marks']) 
+transformed_data
