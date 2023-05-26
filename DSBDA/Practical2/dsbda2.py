@@ -1,7 +1,7 @@
 import pandas as pd 
 import numpy as np 
 
-df=pd.read_csv(r'C:\CSV_file\Academic-Performance-Dataset.csv') 
+df=pd.read_csv(r'D:\College Assignments\python\Academic-Performance-Dataset.csv') 
 df.head()   
 
 df['EM1_marks'].isnull().sum()  
