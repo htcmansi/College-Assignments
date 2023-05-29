@@ -1,28 +1,23 @@
-# Jobs, Profit, Slot
-profit = [15,27,10,100, 150]
-jobs = ["j1", "j2", "j3", "j4", "j5"]
-deadline = [2,3,3,3,4] 
-profitNJobs = list(zip(profit,jobs,deadline))
-profitNJobs = sorted(profitNJobs, key = lambda x: x[0], reverse = True)
-slot = []
-for _ in range(len(jobs)):
-    slot.append(0)
+def schedule_jobs(jobs):
+    # Sort jobs in descending order of their durations
+    sorted_jobs = sorted(jobs, key=lambda x: x[1], reverse=True)
 
-profit = 0
-ans = []
+    # Initialize the schedule and the finish time
+    schedule = []
+    finish_time = 0
 
-for i in range(len(jobs)):
-    ans.append('null')
+    # Iterate over the sorted jobs and assign them to the schedule
+    for job in sorted_jobs:
+        start_time = max(job[0], finish_time)  # Start time is the maximum of the current job's start time and the finish time of the previous job
+        finish_time = start_time + job[1]  # Update the finish time
+        schedule.append((job[0], start_time, finish_time))  # Add the job to the schedule
 
-for i in range(len(jobs)):
-        job = profitNJobs[i]
-        #check if slot is occupied
-        for j in range(job[2], 0, -1):
-            if slot[j] == 0:
-                ans[j] = job[1]
-                profit += job[0]
-                slot[j] = 1
-                break
-        
-print("Jobs scheduled:",ans[1:])
-print(profit)
+    return schedule
+
+
+jobs = [(1, 4), (2, 2), (3, 5), (4, 7), (5, 1)]
+result = schedule_jobs(jobs)
+
+# Print the schedule
+for job in result:
+    print(f"Job {job[0]} starts at {job[1]} and finishes at {job[2]}")
