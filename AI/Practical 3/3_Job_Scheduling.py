@@ -1,23 +1,20 @@
-def schedule_jobs(jobs):
-    # Sort jobs in descending order of their durations
-    sorted_jobs = sorted(jobs, key=lambda x: x[1], reverse=True)
-
-    # Initialize the schedule and the finish time
-    schedule = []
-    finish_time = 0
-
-    # Iterate over the sorted jobs and assign them to the schedule
-    for job in sorted_jobs:
-        start_time = max(job[0], finish_time)  # Start time is the maximum of the current job's start time and the finish time of the previous job
-        finish_time = start_time + job[1]  # Update the finish time
-        schedule.append((job[0], start_time, finish_time))  # Add the job to the schedule
-
+def schedule_job(jobs):
+    jobs=sorted(jobs,key=lambda x:x[1])
+    
+    schedule=[]
+    prev_end_time=0
+    
+    for job in jobs:
+        start_time,end_time,profit=job
+        if start_time >= prev_end_time:
+            schedule.append(job)
+            prev_end_time=end_time
     return schedule
 
+job=[(0,2,30),(3,6,35),(4,7,56),(7,9,67)]
+result=schedule_job(job)
+print("Scheduled jobs: ")
 
-jobs = [(1, 4), (2, 2), (3, 5), (4, 7), (5, 1)]
-result = schedule_jobs(jobs)
-
-# Print the schedule
 for job in result:
-    print(f"Job {job[0]} starts at {job[1]} and finishes at {job[2]}")
+    print(f"Start time: {job[0]}, End time: {job[1]}, Profit: {job[2]}")
+        
